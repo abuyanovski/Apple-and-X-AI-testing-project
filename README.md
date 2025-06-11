@@ -15,47 +15,54 @@ Welcome to our group's two-part QA Automation project. This project demonstrates
 - Automated using **Selenium WebDriver**
 - Validates key UI elements, page titles, navigation flow, and responsiveness
 - Organized with **Page Object Model** for scalability
+- Built with Python `unittest`
 
 ### 🔹 Part 2: API Testing – `x-ai.com`
 
 - Tests REST APIs for correct responses, status codes, and data structures
 - Validates authentication, error handling, and edge cases
-- Built with Python `unittest` + `requests`
+
 
 ---
 
 ## 🧱 Project Structure
 
 Project Folder/  
-├── 01_Documentation  frontend_tests/ # Selenium tests for apple.com  
+├── 01_Documentation  
 ├── 02_Front_end_Testing  
-│   ├── placeholder   
-│   ├── placeholder       
-│   ├── placeholder          
-│   └── placeholder           
+│   ├── Tatsiana Lentz  
+│   ├── Milana Binaminova    
+│   ├── Sergiy Borovich      
+│   ├── Viktor Pervushkin     
+│   ├── Assiya Beribassova    
+│   ├── Lina Gorelik   
+│   ├── Daria Bataeva  
+│   └── Anton Buyanovski           
 ├── 03_Performance_testing  
-│ ├── placeholder  
-│ ├── placeholder     
-│ ├── placeholder         
-│ └── placeholder         
+│ ├── GTmetrix  
+│ ├── Lighthouse     
+│ └── SpeedLab         
 ├── 04_Security_testing  
-│ ├── placeholder  
-│ └── placeholder
+│ ├── HTTP Observatory  
+│ ├── Astra  
+│ └── Other Security Testing Tools  
 ├── 05_API_Testing  
 │ ├── data/ # Sample payloads or config  
 │ ├── pages/ # Page Object Model classes  
-│ ├── pages/ # Page Object Model classes
-│ └── utils/ # Helpers (e.g., token generator)  
+│ └── utils/ # Helpers   
 ├── 06_Bug_Reports  
-│   ├── placeholder       
-│   ├── placeholder          
-│   └── placeholder           
-├── placeholder  
-├── placeholder  
+│   ├── Tatsiana Lentz  
+│   ├── Milana Binaminova  
+│   ├── Sergiy Borovich      
+│   ├── Viktor Pervushkin     
+│   ├── Assiya Beribassova    
+│   ├── Lina Gorelik   
+│   ├── Daria Bataeva  
+│   └── Anton Buyanovski           
 └── README.md # You're here!  
 
 
-THIS HERE IS JUST A PLACEHOLDER. "Structure" seems to be a common feature. 
+
 
 
 ---
@@ -74,14 +81,17 @@ THIS HERE IS JUST A PLACEHOLDER. "Structure" seems to be a common feature.
 ## 👥 Team
 | Name                          | Link                                   | 
 |-------------------------------|----------------------------------------|
+| Sergey Efremov (Project Lead) | https://www.linkedin.com/in/sefremoff  |
+| Tatsiana Lentz (QA Lead )     | www.linkedin.com/in/tatsianalentz      |
 | Milana Binaminova             | www.linkedin.com/in/milana-binaminova  |
 | Sergiy Borovich               | www.linkedin.com/in/sergiy-borovich    |
 | Viktor Pervushkin             | www.linkedin.com/in/viktp              |
 | Assiya Beribassova            | www.linkedin.com/in/assiya-beribassova |
+| Lina Gorelik                  | www.linkedin.com/in/lina-gorelik       |
 | Daria Bataeva                 | www.linkedin.com/in/daria-bataeva      |
 | Anton Buyanovski              | www.linkedin.com/in/antonb-qa          |
-| Tatsiana Lentz (QA Lead )     | www.linkedin.com/in/tatsianalentz      |
-| Sergey Efremov (Project Lead) | https://www.linkedin.com/in/sefremoff  |
+
+
 
 # Apple-and-X-AI-testing-project
 Apple and X-AI testing project: FE, API, Performance and Security testing, Cloud Automation testing, QA-Documentation. https://www.apple.com/ , https://x.ai/
