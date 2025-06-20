@@ -89,6 +89,7 @@ Project Folder/
 | Assiya Beribassova            | www.linkedin.com/in/assiya-beribassova |
 | Lina Gorelik                  | www.linkedin.com/in/lina-gorelik       |
 | Daria Bataeva                 | www.linkedin.com/in/daria-bataeva      |
+| Serine Zargaryan              | https://www.linkedin.com/in/serinezargaryan/ |
 | Anton Buyanovski              | www.linkedin.com/in/antonb-qa          |
 
 
