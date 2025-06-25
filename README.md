@@ -1,5 +1,6 @@
+# Apple-and-X-AI-testing-project
 
-![Test Diagram](Project Header.png)
+![Main pic](https://github.com/SergioUS/Apple-and-X-AI-testing-project/blob/main/Project%20Header.png)
 
 # 🧪 QA Automation Project: Frontend & API Testing
 
