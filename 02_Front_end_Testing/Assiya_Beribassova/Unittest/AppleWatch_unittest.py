@@ -56,8 +56,8 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         driver.switch_to.window(driver.window_handles[-1])
         time.sleep(5)
         driver.find_element(By.XPATH, "//h2[contains(text(),'Chat with us online.')]").click()
-        delay()
         print("5. Click on ‘Chat with us online’.")
+        time.sleep(5)
         driver.find_element(By.ID, "txt_userMessage").send_keys("Buy an apple watch")
         print("6. In the chat window, send the message: “Buy an apple watch”.")
         driver.find_element(By.ID, "sendIcon").click()
@@ -203,7 +203,8 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         driver.find_element(By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']").click()
         print("5. Scroll horizontally to the right to find 'Apple Watch Hermès Series 10'")
         delay()
-        driver.find_element(By.XPATH, "//div[@id='panel-:r22:-0']//a[@class='button rf-digitalmat-button']").click()
+        buy1 = driver.find_element(By.XPATH, "//a[@data-autom='DigitalMat-buynow-button-3']")
+        driver.execute_script("arguments[0].click();", buy1)
         delay()
         print("6. Click on 'Buy' button.")
         try:
@@ -357,7 +358,8 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         driver.find_element(By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']").click()
         print("5. Scroll horizontally to the right to find 'Apple Watch Hermès Series 10'")
         delay()
-        driver.find_element(By.XPATH, "//div[@id='panel-:r22:-0']//a[@class='button rf-digitalmat-button']").click()
+        buy1 = driver.find_element(By.XPATH, "//a[@data-autom='DigitalMat-buynow-button-3']")
+        driver.execute_script("arguments[0].click();", buy1)
         delay()
         print("6. Click on 'Buy' button.")
         wait.until(EC.visibility_of_element_located((By.XPATH, "//h1[normalize-space()='Buy Apple Watch Hermès']")))
@@ -432,7 +434,8 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         driver.find_element(By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']").click()
         print("5. Scroll horizontally to the right to find 'Apple Watch Hermès Series 10'")
         delay()
-        driver.find_element(By.XPATH, "//div[@id='panel-:r22:-0']//a[@class='button rf-digitalmat-button']").click()
+        buy1 = driver.find_element(By.XPATH, "//a[@data-autom='DigitalMat-buynow-button-3']")
+        driver.execute_script("arguments[0].click();", buy1)
         delay()
         print("6. Click on 'Buy' button.")
         try:
@@ -503,3 +506,6 @@ class AppleWatchNegativeChrome(unittest.TestCase):
 
     def tearDown(self):
         self.driver.quit()
+
+
+

@@ -26,7 +26,7 @@ class AppleWatchPositiveChrome(unittest.TestCase):
 
     def test_chrome_TC_P31(self):
         driver = self.driver
-    #TC_P_031
+        # TC_P_031
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                            Store/ Apple Watch                      ')
@@ -39,7 +39,7 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         print('                               TC_P_031                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that user is able to contact a specialist with "Ask an Apple Watch Specialist".
+        # Verify that user is able to contact a specialist with "Ask an Apple Watch Specialist".
         driver.get(h.site)
         print("1. Open 'https://www.apple.com/' website.")
         wait = WebDriverWait(driver, 2)
@@ -48,36 +48,38 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         print("2. Click on the ‘Store’ button.")
         driver.find_element(By.XPATH, h.apple_watch).click()
         print('3. Click on the ‘Apple Watch’ button.')
-        driver.find_element(By.XPATH, "//a[@class='as-chat-button active as-buttonlink icon icon-after icon-external']").click()
-    #Page title
+        driver.find_element(By.XPATH,
+                            "//a[@class='as-chat-button active as-buttonlink icon icon-after icon-external']").click()
+        # Page title
         assert h.title in driver.title
         print("Page title is:", driver.title)
         print("4. Navigate to the ‘Ask an Apple Watch Specialist’ page.")
         driver.switch_to.window(driver.window_handles[-1])
         time.sleep(5)
         driver.find_element(By.XPATH, "//h2[contains(text(),'Chat with us online.')]").click()
-        delay()
         print("5. Click on ‘Chat with us online’.")
+        time.sleep(5)
         driver.find_element(By.ID, "txt_userMessage").send_keys("Buy an apple watch")
         print("6. In the chat window, send the message: “Buy an apple watch”.")
         driver.find_element(By.ID, "sendIcon").click()
-    # The user successfully sent a message through the chat interface. All links provided in the chat were navigated to the correct pages without errors.
+        # The user successfully sent a message through the chat interface. All links provided in the chat were navigated to the correct pages without errors.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                           TC_P_031 PASSED                          ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
+
     def test_chrome_TC_P32(self):
         driver = self.driver
-    # TC_P_032
+        # TC_P_032
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_P_032                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that the user can choose a store located in New York from the 'Find a Store' feature.
+        # Verify that the user can choose a store located in New York from the 'Find a Store' feature.
         driver.get(h.site)
         print("1. Open 'https://www.apple.com/' website.")
         wait = WebDriverWait(driver, 5)
@@ -99,7 +101,7 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         driver.find_element(By.XPATH, "//section[@aria-label='find store']").click()
         delay()
         wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[normalize-space()='Stores near New York, NY']")))
-    # The user successfully got location information for Apple Stores in New York. Store details were accurate and all associated links were functional.
+        # The user successfully got location information for Apple Stores in New York. Store details were accurate and all associated links were functional.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
@@ -109,18 +111,18 @@ class AppleWatchPositiveChrome(unittest.TestCase):
 
     def test_chrome_TC_P33(self):
         driver = self.driver
-    # TC_P_033
+        # TC_P_033
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_P_033                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that header menu buttons are functional.
+        # Verify that header menu buttons are functional.
         driver.get(h.site)
         wait = WebDriverWait(driver, 2)
         print("1. Open 'https://www.apple.com/' website.")
-        wait.until(EC.visibility_of_element_located((By.XPATH,h.apple_logo)))
+        wait.until(EC.visibility_of_element_located((By.XPATH, h.apple_logo)))
         driver.find_element(By.XPATH, h.store_button).click()
         print("2. Click on the ‘Store’ button.")
         driver.find_element(By.XPATH, h.apple_watch).click()
@@ -131,7 +133,8 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         print("5. Click on 'Shopping guides' button.")
         driver.find_element(By.XPATH, "//a[normalize-space()='Ways to Save']").click()
         print("6. Click on 'Ways to save' button.")
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//a[@class='rf-navbar-item-link'][normalize-space()='Apple Watch Bands']")))
+        wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//a[@class='rf-navbar-item-link'][normalize-space()='Apple Watch Bands']")))
         print("7. Click on 'Apple Watch bands' button.")
         wait.until(EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='Setup and Support']")))
         print("8. Click on 'Setup and support' button.")
@@ -139,23 +142,24 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         print("9. Click on 'The Apple Watch experience' button.")
         wait.until(EC.element_to_be_clickable((By.XPATH, "//a[normalize-space()='Special Stores']")))
         print("10. Click on 'Special Savings' button.")
-    # All header menu buttons are functional. Each button successfully navigates the user to the correct section of the page without errors or delays.
+        # All header menu buttons are functional. Each button successfully navigates the user to the correct section of the page without errors or delays.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                           TC_P_033 PASSED                          ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
+
     def test_chrome_TC_P34(self):
         driver = self.driver
-    # TC_P_034
+        # TC_P_034
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_P_034                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that user is able to select 'Apple Watch Hermès Series 10' from product list.
+        # Verify that user is able to select 'Apple Watch Hermès Series 10' from product list.
         driver.get(h.site)
         wait = WebDriverWait(driver, 2)
         print("1. Open 'https://www.apple.com/' website.")
@@ -166,27 +170,29 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         print('3. Click on the ‘Apple Watch’ button.')
         driver.find_element(By.XPATH, h.AllModels).click()
         print("4. Click on 'All models' button.")
-        wait.until(EC.visibility_of_element_located((By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']")))
+        wait.until(
+            EC.visibility_of_element_located((By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']")))
         driver.find_element(By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']").click()
         delay()
         print("5. Scroll horizontally to the right to find 'Apple Watch Hermès Series 10'")
-    # 'Apple Watch Hermès Series 10' is visible and the user is able to choose from the listed options.
+        # 'Apple Watch Hermès Series 10' is visible and the user is able to choose from the listed options.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                           TC_P_034 PASSED                          ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
+
     def test_chrome_TC_P35(self):
         driver = self.driver
-    # TC_P_035
+        # TC_P_035
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_P_035                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that the user can successfully add the 'Apple Watch Hermès Series 10' to the cart.
+        # Verify that the user can successfully add the 'Apple Watch Hermès Series 10' to the cart.
         driver.get(h.site)
         wait = WebDriverWait(driver, 2)
         print("1. Open 'https://www.apple.com/' website.")
@@ -199,11 +205,13 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         delay()
         driver.find_element(By.XPATH, h.AllModels).click()
         print("4. Click on 'All models' button.")
-        wait.until(EC.visibility_of_element_located((By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']")))
+        wait.until(
+            EC.visibility_of_element_located((By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']")))
         driver.find_element(By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']").click()
         print("5. Scroll horizontally to the right to find 'Apple Watch Hermès Series 10'")
         delay()
-        driver.find_element(By.XPATH, "//div[@id='panel-:r22:-0']//a[@class='button rf-digitalmat-button']").click()
+        buy1 = driver.find_element(By.XPATH, "//a[@data-autom='DigitalMat-buynow-button-3']")
+        driver.execute_script("arguments[0].click();", buy1)
         delay()
         print("6. Click on 'Buy' button.")
         try:
@@ -211,10 +219,13 @@ class AppleWatchPositiveChrome(unittest.TestCase):
             print('Page URL is: ', driver.current_url)
         except AssertionError:
             print("Current url is different ", driver.current_url)
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//span[@class='form-selector-title'][normalize-space()='42mm']"))).click()
+        wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//span[@class='form-selector-title'][normalize-space()='42mm']"))).click()
         print("7.1. Select 42mm")
         driver.find_element(By.TAG_NAME, "html").send_keys(Keys.SPACE)
-        wait.until(EC.visibility_of_element_located((By.XPATH, "//label[@id=':re:_label']//span[@class='form-selector-title']"))).click()
+        delay()
+        wait.until(EC.visibility_of_element_located(
+            (By.XPATH, "//label[@id=':re:_label']//span[@class='form-selector-title']"))).click()
         print("7.2. Select 'Toile H Single Tour'")
         delay()
         gold_ecru_color_element = wait.until(EC.element_to_be_clickable((By.XPATH, h.gold_ecru_color_xpath)))
@@ -237,13 +248,14 @@ class AppleWatchPositiveChrome(unittest.TestCase):
         print("7.7. Click on 'Add to bag' button")
         wait.until(EC.visibility_of_element_located((By.XPATH, "//button[@data-autom='proceed']"))).click()
         print("8. Review cart")
-    # The user successfully added the item to the shopping bag and all selected characteristics are correctly displayed in the bag summary.
+        # The user successfully added the item to the shopping bag and all selected characteristics are correctly displayed in the bag summary.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                           TC_P_035 PASSED                          ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
+
     def tearDown(self):
         self.driver.quit()
 
@@ -257,7 +269,7 @@ class AppleWatchNegativeChrome(unittest.TestCase):
 
     def test_chrome_TC_N31(self):
         driver = self.driver
-    #TC_N_031
+        # TC_N_031
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                            Store/ Apple Watch                      ')
@@ -270,7 +282,7 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         print('                               TC_N_031                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that searching for 'Portland' in 'Find a store' returns store information for New York.
+        # Verify that searching for 'Portland' in 'Find a store' returns store information for New York.
 
         driver.get(h.site)
         print("1. Open 'https://www.apple.com/' website.")
@@ -293,7 +305,7 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         driver.find_element(By.XPATH, "//section[@aria-label='find store']").click()
         delay()
         wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[text()='Stores near Portland, ME']")))
-    # When 'Portland, ME' was entered in the search bar, the system correctly returned a list of store locations in or near 'Portland, ME'. No incorrect results (such as stores in New York) were displayed.
+        # When 'Portland, ME' was entered in the search bar, the system correctly returned a list of store locations in or near 'Portland, ME'. No incorrect results (such as stores in New York) were displayed.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
@@ -303,14 +315,14 @@ class AppleWatchNegativeChrome(unittest.TestCase):
 
     def test_chrome_TC_N32(self):
         driver = self.driver
-    #TC_N_032
+        # TC_N_032
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_N_032                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that by clicking 'All models' in header user can go to 'Apple Watch bands' section.
+        # Verify that by clicking 'All models' in header user can go to 'Apple Watch bands' section.
         driver.get(h.site)
         wait = WebDriverWait(driver, 2)
         print("1. Open 'https://www.apple.com/' website.")
@@ -322,7 +334,7 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         driver.find_element(By.XPATH, h.AllModels).click()
         print("4. Click on 'All models' button.")
         wait.until(EC.visibility_of_element_located((By.XPATH, "//h2[normalize-space()='All models.']")))
-    # Clicking the 'All models' correctly displayed a list of watch models, without defaulting to the band collection.
+        # Clicking the 'All models' correctly displayed a list of watch models, without defaulting to the band collection.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
@@ -332,14 +344,14 @@ class AppleWatchNegativeChrome(unittest.TestCase):
 
     def test_chrome_TC_N33(self):
         driver = self.driver
-    #TC_N_033
+        # TC_N_033
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_N_033                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that by clicking 'Apple Watch Series 10' the user can be redirected to 'Apple Watch SE' page.
+        # Verify that by clicking 'Apple Watch Series 10' the user can be redirected to 'Apple Watch SE' page.
         driver.get(h.site)
         wait = WebDriverWait(driver, 2)
         print("1. Open 'https://www.apple.com/' website.")
@@ -357,27 +369,29 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         driver.find_element(By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']").click()
         print("5. Scroll horizontally to the right to find 'Apple Watch Hermès Series 10'")
         delay()
-        driver.find_element(By.XPATH, "//div[@id='panel-:r22:-0']//a[@class='button rf-digitalmat-button']").click()
+        buy1 = driver.find_element(By.XPATH, "//a[@data-autom='DigitalMat-buynow-button-3']")
+        driver.execute_script("arguments[0].click();", buy1)
         delay()
         print("6. Click on 'Buy' button.")
         wait.until(EC.visibility_of_element_located((By.XPATH, "//h1[normalize-space()='Buy Apple Watch Hermès']")))
-    # Clicking the button performed the expected action on the same page without redirecting.
+        # Clicking the button performed the expected action on the same page without redirecting.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                           TC_N_033 PASSED                          ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
+
     def test_chrome_TC_N34(self):
         driver = self.driver
-    #TC_N_034
+        # TC_N_034
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_N_034                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that user is able to send an empty search query from search bar in 'Find a Store' page.
+        # Verify that user is able to send an empty search query from search bar in 'Find a Store' page.
 
         driver.get(h.site)
         print("1. Open 'https://www.apple.com/' website.")
@@ -400,22 +414,23 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         driver.find_element(By.XPATH, "//section[@aria-label='find store']").click()
         delay()
 
-    # The system prevented empty search.
+        # The system prevented empty search.
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                           TC_N_034 PASSED                          ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
+
     def test_chrome_TC_N35(self):
         driver = self.driver
-    #TC_N_035
+        # TC_N_035
         print('                                                                    ')
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                               TC_N_035                             ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-    # Verify that user is able to proceed checkout 'Apple Watch Hermès Series 10' with 77 times.
+        # Verify that user is able to proceed checkout 'Apple Watch Hermès Series 10' with 77 times.
         driver.get(h.site)
         wait = WebDriverWait(driver, 2)
         print("1. Open 'https://www.apple.com/' website.")
@@ -428,11 +443,13 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         delay()
         driver.find_element(By.XPATH, h.AllModels).click()
         print("4. Click on 'All models' button.")
-        wait.until(EC.visibility_of_element_located((By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']")))
+        wait.until(
+            EC.visibility_of_element_located((By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']")))
         driver.find_element(By.XPATH, "//h3[normalize-space()='Apple Watch Hermès Series 10']").click()
         print("5. Scroll horizontally to the right to find 'Apple Watch Hermès Series 10'")
         delay()
-        driver.find_element(By.XPATH, "//div[@id='panel-:r22:-0']//a[@class='button rf-digitalmat-button']").click()
+        buy1 = driver.find_element(By.XPATH, "//a[@data-autom='DigitalMat-buynow-button-3']")
+        driver.execute_script("arguments[0].click();", buy1)
         delay()
         print("6. Click on 'Buy' button.")
         try:
@@ -440,11 +457,13 @@ class AppleWatchNegativeChrome(unittest.TestCase):
             print('Page URL is: ', driver.current_url)
         except AssertionError:
             print("Current url is different ", driver.current_url)
-        wait.until(EC.element_to_be_clickable((By.XPATH, "//span[@class='form-selector-title'][normalize-space()='42mm']"))).click()
+        wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//span[@class='form-selector-title'][normalize-space()='42mm']"))).click()
         print("7.1. Select 42mm")
         driver.find_element(By.TAG_NAME, "html").send_keys(Keys.SPACE)
         delay()
-        wait.until(EC.visibility_of_element_located((By.XPATH, "//label[@id=':re:_label']//span[@class='form-selector-title']"))).click()
+        wait.until(EC.visibility_of_element_located(
+            (By.XPATH, "//label[@id=':re:_label']//span[@class='form-selector-title']"))).click()
         print("7.2. Select 'Toile H Single Tour'")
         delay()
         gold_ecru_color_element = wait.until(EC.element_to_be_clickable((By.XPATH, h.gold_ecru_color_xpath)))
@@ -468,23 +487,24 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         wait.until(EC.visibility_of_element_located((By.XPATH, "//button[@data-autom='proceed']"))).click()
         print("9. Click on review bag button")
         delay()
-    # Quantity dropdown menu
+        # Quantity dropdown menu
         dropdown = driver.find_element(By.XPATH, "//select[@data-autom='item-quantity-dropdown']")
-    # Create Select object
+        # Create Select object
         select = Select(dropdown)
-    # Select by value
+        # Select by value
         select.select_by_value("10")
-    # Quantity input field
-        qty_input = driver.find_element(By.XPATH,"//input[contains(@class, 'rs-quantity-textbox') and @type='tel']")
+        # Quantity input field
+        qty_input = driver.find_element(By.XPATH, "//input[contains(@class, 'rs-quantity-textbox') and @type='tel']")
         qty_input.click()
         qty_input.clear()
         qty_input.send_keys("77")
         driver.find_element(By.TAG_NAME, "body").click()
         delay()
-    # Refresh page
+        # Refresh page
         driver.refresh()
         delay()
-        error_message_textweb = driver.find_element(By.XPATH, "//div[@class='rt-messages-text'][normalize-space()='A maximum of 6 Apple Watch Hermès Series 10 (GPS + Cellular) can be purchased per customer. Please adjust the total quantity of Apple Watch Hermès Series 10 (GPS + Cellular) in your order before checking out.']").text
+        error_message_textweb = driver.find_element(By.XPATH,
+                                                    "//div[@class='rt-messages-text'][normalize-space()='A maximum of 6 Apple Watch Hermès Series 10 (GPS + Cellular) can be purchased per customer. Please adjust the total quantity of Apple Watch Hermès Series 10 (GPS + Cellular) in your order before checking out.']").text
 
         try:
             assert h.error_message_textdoc in error_message_textweb
@@ -492,14 +512,13 @@ class AppleWatchNegativeChrome(unittest.TestCase):
         except AssertionError:
             print("Error Text is NOT OK", error_message_textweb)
             driver.save_screenshot("No Error text.png")
-    #The user is not allowed to add 77 times of an item to the shopping bag and an error message was shown.
+        # The user is not allowed to add 77 times of an item to the shopping bag and an error message was shown.
 
         print('--------------------------------------------------------------------')
         print('                                                                    ')
         print('                           TC_N_035 PASSED                          ')
         print('                                                                    ')
         print('--------------------------------------------------------------------')
-
 
     def tearDown(self):
         self.driver.quit()
