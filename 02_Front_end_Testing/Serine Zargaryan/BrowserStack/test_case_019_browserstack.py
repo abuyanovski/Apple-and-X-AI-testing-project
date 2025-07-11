@@ -64,5 +64,5 @@ def test_case_019_positive_apple_arcade(driver):
     faq_button = driver.find_element(By.XPATH, h.faq_button_by_aria(aria_controls))
     expanded = faq_button.get_attribute("aria-expanded")
 
-    assert expanded == h.expected_expanded_value, "❌ FAQ item did not expand after ENTER key"
-    print("✅ FAQ item expanded successfully")
+    assert expanded == h.expected_expanded_value, " FAQ item did not expand after ENTER key"
+    print("FAQ item expanded successfully")
