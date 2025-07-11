@@ -18,19 +18,6 @@ from selenium.webdriver.edge.service import Service as EdgeService
 def delay():
     time.sleep(random.randint(2, 8))
 
-
-class AllElement:
-    pass
-
-
-class WebElement:
-    pass
-
-
-class Sign:
-    pass
-
-
 class ChromePositiveAccessories(unittest.TestCase):
 
     def setUp(self):
