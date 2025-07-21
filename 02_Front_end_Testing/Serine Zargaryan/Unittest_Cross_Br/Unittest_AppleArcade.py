@@ -1,896 +1,556 @@
-#import AllureReports
-#import HtmlTestRunner
-import random
 import time
 import unittest
-from selenium import webdriver
+
 from selenium.common import TimeoutException
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.common.action_chains import ActionChains
-from selenium.webdriver.common.keys import Keys
-from webdriver_manager.microsoft import EdgeChromiumDriverManager
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.firefox import GeckoDriverManager
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.firefox.service import Service as FirefoxService
-from selenium.webdriver.edge.service import Service as EdgeService
+from selenium.webdriver.support.ui import WebDriverWait
+
+# Import helpers (assuming they are in a separate test_helpers.py file)
+from test_helpers import (
+    WebDriverFactory,
+    AppleArcadePageActions,
+    KeyboardNavigationHelper,
+    TestAssertionHelpers,
+    VideoTestHelper,
+    NegativeTestHelper,
+    PageSelectors
+)
 
 
-def delay():
-    time.sleep(random.randint(1, 5))
+class BaseAppleArcadeTest(unittest.TestCase):
+    """Base class for all Apple Arcade tests"""
 
-
-class ChromePositiveTestCases(unittest.TestCase):
     def setUp(self):
-        service = ChromeService(ChromeDriverManager().install())
-        options = webdriver.ChromeOptions()
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Chrome(service=service, options=options)
+        """Create driver and helpers before each test"""
+        self.driver = self._create_driver()
+        self.page_actions = AppleArcadePageActions(self.driver)
+        self.keyboard_helper = KeyboardNavigationHelper(self.driver)
+        self.video_helper = VideoTestHelper(self.driver)
+        self.negative_helper = NegativeTestHelper(self.driver)
+        self.selectors = PageSelectors()
 
-    def test_case_016_positive_apple_arcade(self):
-        # Verify "Try it free" button works
-        driver = self.driver
-        print("Test Case 016 - try free button")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        try_it_free = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Try it free')]"))
-        )
-        try_it_free.click()
-        time.sleep(2)
-
-        current_url = driver.current_url.lower()
-        self.assertTrue("apple.com" in current_url or "apps.apple.com" in current_url)
-
-    def test_case_017_positive_apple_arcade(self):
-        # Verify external App Store links work
-        driver = self.driver
-        print("Test Case 017 - external App Store links")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Wait for the first App Store link to be present
-        game_card = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//a[contains(@href, 'apps.apple.com')]"))
-        )
-        # Scroll to the App Store link smoothly and center it in the viewport
-        driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", game_card)
-        time.sleep(2)
-
-        # Click the App Store link
-        game_card.click()
-        time.sleep(2)
-
-        # Switch to the newly opened tab
-        driver.switch_to.window(driver.window_handles[-1])
-
-        # Verify that the current URL contains 'apps.apple.com'
-        current_url = driver.current_url.lower()
-        self.assertIn("apps.apple.com", current_url)
-
-    def test_case_018_positive_apple_arcade(self):
-        # Verify FAQ item expands on click
-        driver = self.driver
-        print("Test Case 018 - FAQ expand on click")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Scroll to the FAQ section header
-        faq_header = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
-        )
-        driver.execute_script("arguments[0].scrollIntoView(true);", faq_header)
-        time.sleep(2)
-
-        faq_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-controls, 'accordion')]"))
-        )
-        faq_button.click()
-        time.sleep(4)
-
-        expanded = faq_button.get_attribute("aria-expanded")
-        self.assertEqual(expanded, "true")
-
-    def test_case_019_positive_apple_arcade(self):
-        driver = self.driver
-        print("Test Case 019 - FAQ accessibility with keyboard")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Locate the FAQ section header by XPath
-        faq_header = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
-        )
-
-        # Scroll to the FAQ header to bring FAQ into view
-        driver.execute_script("arguments[0].scrollIntoView(true);", faq_header)
-        time.sleep(1)
-
-        # Focus on the body element
-        body = driver.find_element(By.TAG_NAME, "body")
-
-        # Press TAB once - focus should move to the first FAQ toggle button
-        body.send_keys(Keys.TAB)
-        time.sleep(2)
-
-        # Get the currently focused element (expected first FAQ button)
-        focused = driver.switch_to.active_element
-
-        # Store unique attribute to refind the element later
-        aria_controls = focused.get_attribute("aria-controls")
-
-        # Press ENTER to expand the FAQ item
-        focused.send_keys(Keys.ENTER)
-        time.sleep(2)
-
-        # Re-find the FAQ button after DOM update
-        refreshed_faq_button = driver.find_element(By.XPATH, f"//button[@aria-controls='{aria_controls}']")
-
-        # Verify that the FAQ item expanded (aria-expanded="true")
-        expanded = refreshed_faq_button.get_attribute("aria-expanded")
-        self.assertEqual(expanded, "true", "FAQ item did not expand after ENTER key")
-
-    def test_case_020_positive_apple_arcade(self):
-        # Verify video banner playback
-        driver = self.driver
-        print("Test Case 020 - Verify video banner playback")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        wait = WebDriverWait(driver, 15)
-
-        # Wait for the video element
-        video = wait.until(EC.presence_of_element_located((By.TAG_NAME, "video")))
-
-        # Try to find and click the pause button
-        try:
-            pause_button = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, "//button[@aria-label='pause hero video']")
-            ))
-            pause_button.click()
-            time.sleep(2)
-
-            # Check that video is paused
-            is_paused = driver.execute_script("return arguments[0].paused;", video)
-            self.assertTrue(is_paused, "Video did not pause after clicking Pause button")
-        except TimeoutException:
-            # If pause button not found, check if video is already paused
-            is_paused = driver.execute_script("return arguments[0].paused;", video)
-            if not is_paused:
-                self.fail("Pause button not found and video is playing")
-
-        # Find the play button and click it
-        play_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[@aria-label='play hero video']")
-        ))
-        play_button.click()
-        time.sleep(3)
-
-        # Verify that video is playing
-        is_playing = driver.execute_script("return !arguments[0].paused;", video)
-        self.assertTrue(is_playing, "Video did not start playing after clicking Play button")
+    def _create_driver(self):
+        """Must be overridden in subclasses to create browser-specific driver"""
+        raise NotImplementedError("Subclasses must implement _create_driver method")
 
     def tearDown(self):
-        self.driver.quit()
+        """Quit the driver after each test to free resources"""
+        if hasattr(self, 'driver') and self.driver:
+            self.driver.quit()
 
-class FirefoxPositiveTests(unittest.TestCase):
-    def setUp(self):
-        service = FirefoxService(GeckoDriverManager().install())
-        options = webdriver.FirefoxOptions()
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Firefox(service=service, options=options)
 
-    def test_case_016_positive_apple_arcade(self):
-        # Verify "Try it free" button works
-        driver = self.driver
-        print("Test Case 016 - try free button")
+class ChromePositiveTests(BaseAppleArcadeTest):
+    """Positive test cases for Chrome browser"""
 
-        driver.get("https://www.apple.com/apple-arcade/")
+    def _create_driver(self):
+        """Create Chrome WebDriver instance"""
+        return WebDriverFactory.create_chrome_driver()
 
-        try_it_free = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Try it free')]"))
-        )
+    def test_case_016_try_it_free_button(self):
+        """Verify 'Try it free' button functionality"""
+        print("Test Case 016 - Try it free button functionality")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Find and click the 'Try it free' button
+        try_it_free = self.page_actions.find_try_it_free_button()
         try_it_free.click()
         time.sleep(2)
 
-        current_url = driver.current_url.lower()
-        self.assertTrue("apple.com" in current_url or "apps.apple.com" in current_url)
+        # Verify redirection to Apple domain
+        current_url = self.page_actions.get_current_url_lower()
+        TestAssertionHelpers.assert_url_contains_apple_domains(self, current_url)
 
-    def test_case_017_positive_apple_arcade(self):
-        # Verify external App Store links work
-        driver = self.driver
-        print("Test Case 017 - external App Store links")
+    def test_case_017_app_store_links(self):
+        """Verify external App Store links functionality"""
+        print("Test Case 017 - External App Store links functionality")
+        self.page_actions.navigate_to_apple_arcade()
 
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Wait for the first App Store link to be present
-        game_card = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//a[contains(@href, 'apps.apple.com')]"))
-        )
-        # Scroll to the App Store link smoothly and center it in the viewport
-        driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", game_card)
-        time.sleep(2)
-
-        # Click the App Store link
+        # Find and click App Store link
+        game_card = self.page_actions.find_app_store_link()
+        self.page_actions.scroll_to_element(game_card)
         game_card.click()
         time.sleep(2)
 
-        # Switch to the newly opened tab
-        driver.switch_to.window(driver.window_handles[-1])
+        # Switch to new tab and verify URL
+        self.page_actions.switch_to_new_tab()
+        current_url = self.page_actions.get_current_url_lower()
+        TestAssertionHelpers.assert_url_contains_app_store(self, current_url)
 
-        # Verify that the current URL contains 'apps.apple.com'
-        current_url = driver.current_url.lower()
-        self.assertIn("apps.apple.com", current_url)
+    def test_case_018_faq_expand_click(self):
+        """Verify FAQ item expands on click"""
+        print("Test Case 018 - FAQ expand on click functionality")
+        self.page_actions.navigate_to_apple_arcade()
+        self.page_actions.scroll_to_faq_section()
 
-    def test_case_018_positive_apple_arcade(self):
-        # Verify FAQ item expands on click
-        driver = self.driver
-        print("Test Case 018 - FAQ expand on click")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Scroll to the FAQ section header
-        faq_header = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
-        )
-        driver.execute_script("arguments[0].scrollIntoView(true);", faq_header)
-        time.sleep(2)
-
-        faq_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-controls, 'accordion')]"))
-        )
+        # Find and click FAQ button
+        faq_button = self.page_actions.find_faq_button()
         faq_button.click()
         time.sleep(4)
 
-        expanded = faq_button.get_attribute("aria-expanded")
-        self.assertEqual(expanded, "true")
+        # Verify expansion state
+        TestAssertionHelpers.assert_element_expanded(self, faq_button)
 
-    def test_case_019_positive_apple_arcade(self):
-        driver = self.driver
-        print("Test Case 019 - FAQ accessibility with keyboard")
+    def test_case_019_faq_keyboard_accessibility(self):
+        """Verify FAQ accessibility with keyboard navigation using TAB and ENTER keys"""
+        print("Test Case 019 - FAQ keyboard accessibility")
 
-        driver.get("https://www.apple.com/apple-arcade/")
+        # Navigate to Apple Arcade page
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Wait for page to fully load
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
+        )
+        time.sleep(2)  # Additional wait for dynamic content
+
+        # Scroll to FAQ section first
+        self.page_actions.scroll_to_faq_section()
+        time.sleep(2)  # Wait after scrolling
+
+        # Focus on body element to start keyboard navigation
+        body = self.keyboard_helper.focus_body_element()
+        time.sleep(1)
+
+        # Use tab_to_element helper to find FAQ button
+        focused, aria_controls = self.keyboard_helper.tab_to_element(max_tabs=15)
+
+        # If first attempt fails, try scrolling more precisely and retry
+        if aria_controls is None:
+            print("First TAB attempt failed, trying to scroll more precisely to FAQ")
+            try:
+                # Find FAQ button to scroll to it more precisely
+                faq_button = WebDriverWait(self.driver, 5).until(
+                    EC.presence_of_element_located(self.selectors.FAQ_BUTTON)
+                )
+                # Scroll directly to the FAQ button
+                self.page_actions.scroll_to_element(faq_button, block='center')
+                time.sleep(2)
+
+                # Focus on body again and retry TAB navigation
+                body = self.keyboard_helper.focus_body_element()
+                time.sleep(1)
+
+                # Retry with more TAB presses
+                focused, aria_controls = self.keyboard_helper.tab_to_element(max_tabs=20)
+
+            except TimeoutException:
+                self.fail("Could not find FAQ button on the page")
+
+        # Verify we found the FAQ toggle button
+        self.assertIsNotNone(
+            aria_controls,
+            "Could not focus on FAQ toggle button after TAB navigation. "
+            "Try increasing max_tabs or check page structure."
+        )
+
+        print(f"Successfully focused on FAQ button with aria-controls: {aria_controls}")
+
+        # Press ENTER to expand FAQ
+        self.keyboard_helper.press_enter_on_element(focused)
+        time.sleep(2)  # Wait for animation
+
+        # Re-find the FAQ button and verify it's expanded
+        refreshed_faq_button = self.driver.find_element(
+            *self.selectors.get_faq_button_by_aria_controls(aria_controls)
+        )
+        expanded = refreshed_faq_button.get_attribute("aria-expanded")
+
+        self.assertEqual(
+            expanded,
+            "true",
+            f"FAQ item did not expand after ENTER key. Current state: {expanded}"
+        )
+
+        print("FAQ keyboard accessibility test completed successfully")
+
+    def test_case_020_video_banner_playback(self):
+        """Verify video banner playback controls"""
+        print("Test Case 020 - Video banner playback controls")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Test video controls using helper
+        self.video_helper.test_video_controls(self)
+
+
+class FirefoxPositiveTests(BaseAppleArcadeTest):
+    """Positive test cases for Firefox browser"""
+
+    def _create_driver(self):
+        """Create Firefox WebDriver instance"""
+        return WebDriverFactory.create_firefox_driver()
+
+    def test_case_016_try_it_free_button(self):
+        """Verify 'Try it free' button functionality"""
+        print("Test Case 016 - Try it free button functionality")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Find and click the 'Try it free' button
+        try_it_free = self.page_actions.find_try_it_free_button()
+        try_it_free.click()
+        time.sleep(2)
+
+        # Verify redirection to Apple domain
+        current_url = self.page_actions.get_current_url_lower()
+        TestAssertionHelpers.assert_url_contains_apple_domains(self, current_url)
+
+    def test_case_017_app_store_links(self):
+        """Verify external App Store links functionality"""
+        print("Test Case 017 - External App Store links functionality")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Find and click App Store link
+        game_card = self.page_actions.find_app_store_link()
+        self.page_actions.scroll_to_element(game_card)
+        game_card.click()
+        time.sleep(2)
+
+        # Switch to new tab and verify URL
+        self.page_actions.switch_to_new_tab()
+        current_url = self.page_actions.get_current_url_lower()
+        TestAssertionHelpers.assert_url_contains_app_store(self, current_url)
+
+    def test_case_018_faq_expand_click(self):
+        """Verify FAQ item expands on click"""
+        print("Test Case 018 - FAQ expand on click functionality")
+        self.page_actions.navigate_to_apple_arcade()
+        self.page_actions.scroll_to_faq_section()
+
+        # Find and click FAQ button
+        faq_button = self.page_actions.find_faq_button()
+        faq_button.click()
+        time.sleep(4)
+
+        # Verify expansion state
+        TestAssertionHelpers.assert_element_expanded(self, faq_button)
+
+    def test_case_019_faq_keyboard_accessibility(self):
+        """Firefox variant of FAQ keyboard accessibility test"""
+        print("Test Case 019 - FAQ keyboard accessibility")
+        self.page_actions.navigate_to_apple_arcade()
+        self.page_actions.scroll_to_faq_section()
+
+        # Focus on body element and use TAB navigation
+        body = self.keyboard_helper.focus_body_element()
+        time.sleep(1)
+
+        # Find FAQ button using keyboard navigation
+        focused, aria_controls = self.keyboard_helper.tab_to_element()
+
+        # Verify we found a FAQ toggle button
+        self.assertIsNotNone(
+            aria_controls,
+            "Focused element is not a FAQ toggle button after multiple TABs"
+        )
+
+        # Press ENTER to expand FAQ
+        self.keyboard_helper.press_enter_on_element(focused)
+        time.sleep(1)
+
+        # Verify expansion state
+        refreshed_faq_button = self.driver.find_element(
+            *self.selectors.get_faq_button_by_aria_controls(aria_controls)
+        )
+        TestAssertionHelpers.assert_element_expanded(self, refreshed_faq_button)
+
+    def test_case_020_video_banner_playback(self):
+        """Verify video banner playback controls"""
+        print("Test Case 020 - Video banner playback controls")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Test video controls using helper
+        self.video_helper.test_video_controls(self)
+
+
+class EdgePositiveTests(BaseAppleArcadeTest):
+    """Positive test cases for Edge browser"""
+
+    def _create_driver(self):
+        """Create Edge WebDriver instance"""
+        return WebDriverFactory.create_edge_driver()
+
+    def test_case_016_try_it_free_button(self):
+        """Verify 'Try it free' button functionality"""
+        print("Test Case 016 - Try it free button functionality")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Find and click the 'Try it free' button
+        try_it_free = self.page_actions.find_try_it_free_button()
+        try_it_free.click()
+        time.sleep(2)
+
+        # Verify redirection to Apple domain
+        current_url = self.page_actions.get_current_url_lower()
+        TestAssertionHelpers.assert_url_contains_apple_domains(self, current_url)
+
+    def test_case_017_app_store_links(self):
+        """Verify external App Store links functionality"""
+        print("Test Case 017 - External App Store links functionality")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Find and click App Store link
+        game_card = self.page_actions.find_app_store_link()
+        self.page_actions.scroll_to_element(game_card)
+        game_card.click()
+        time.sleep(2)
+
+        # Switch to new tab and verify URL
+        self.page_actions.switch_to_new_tab()
+        current_url = self.page_actions.get_current_url_lower()
+        TestAssertionHelpers.assert_url_contains_app_store(self, current_url)
+
+    def test_case_018_faq_expand_click(self):
+        """Verify FAQ item expands on click"""
+        print("Test Case 018 - FAQ expand on click functionality")
+
+        # Navigate to Apple Arcade page and wait for load
+        self.page_actions.navigate_to_apple_arcade()
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
+        )
+        self.page_actions.scroll_to_faq_section()
+
+        # Find and click FAQ button
+        faq_button = self.page_actions.find_faq_button()
+        faq_button.click()
+        time.sleep(4)
+
+        # Verify expansion state
+        TestAssertionHelpers.assert_element_expanded(self, faq_button)
+
+    def test_case_019_faq_keyboard_accessibility(self):
+        """Edge variant of FAQ keyboard accessibility test with improved reliability"""
+        print("Test Case 019 - FAQ keyboard accessibility")
+
+        # Navigate and wait for page load
+        self.page_actions.navigate_to_apple_arcade()
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
+        )
+        time.sleep(2)
 
         # Scroll to FAQ section
-        faq_header = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
-        )
-        driver.execute_script("arguments[0].scrollIntoView(true);", faq_header)
+        self.page_actions.scroll_to_faq_section()
+        time.sleep(2)
+
+        # Focus on body element
+        body = self.keyboard_helper.focus_body_element()
         time.sleep(1)
 
-        # Focus body
-        body = driver.find_element(By.TAG_NAME, "body")
-        ActionChains(driver).move_to_element(body).click().perform()
-        time.sleep(1)
+        # Use improved tab_to_element method
+        focused, aria_controls = self.keyboard_helper.tab_to_element(max_tabs=15)
 
-        # Try up to 10 TAB presses to find a FAQ button
-        focused = None
-        aria_controls = None
-        for _ in range(10):
-            ActionChains(driver).send_keys(Keys.TAB).perform()
-            time.sleep(0.5)
-            focused = driver.switch_to.active_element
+        # If not found, try fallback approach
+        if aria_controls is None:
+            print("TAB navigation failed, trying single TAB as fallback")
+            self.keyboard_helper.send_tab_to_body(body)
+            time.sleep(1)
+            focused = self.driver.switch_to.active_element
             aria_controls = focused.get_attribute("aria-controls")
-            if aria_controls:
-                break  # Found a FAQ button
 
-        self.assertIsNotNone(aria_controls, "Focused element is not a FAQ toggle button after 10 TABs")
+        # Verify we found FAQ button
+        self.assertIsNotNone(
+            aria_controls,
+            "Could not focus on FAQ toggle button with keyboard navigation"
+        )
 
-        # Press ENTER to expand it
-        focused.send_keys(Keys.ENTER)
-        time.sleep(1)
+        # Press ENTER to expand FAQ
+        self.keyboard_helper.press_enter_on_element(focused)
+        time.sleep(2)
 
-        # Re-find the same button and check if it's expanded
-        refreshed_faq_button = driver.find_element(By.XPATH, f"//button[@aria-controls='{aria_controls}']")
-        expanded = refreshed_faq_button.get_attribute("aria-expanded")
-        self.assertEqual(expanded, "true", "Focused FAQ item did not expand after ENTER key")
+        # Verify expansion state
+        refreshed_faq_button = self.driver.find_element(
+            *self.selectors.get_faq_button_by_aria_controls(aria_controls)
+        )
+        TestAssertionHelpers.assert_element_expanded(self, refreshed_faq_button)
 
-    def test_case_020_positive_apple_arcade(self):
-        # Verify video banner playback
-        driver = self.driver
-        print("Test Case 020 - Verify video banner playback")
+    def test_case_020_video_banner_playback(self):
+        """Verify video banner playback controls"""
+        print("Test Case 020 - Video banner playback controls")
+        self.page_actions.navigate_to_apple_arcade()
 
-        driver.get("https://www.apple.com/apple-arcade/")
+        # Test video controls using helper
+        self.video_helper.test_video_controls(self)
 
-        wait = WebDriverWait(driver, 15)
 
-        # Wait for the video element
-        video = wait.until(EC.presence_of_element_located((By.TAG_NAME, "video")))
+class ChromeNegativeTests(BaseAppleArcadeTest):
+    """Negative test cases for Chrome browser"""
 
-        # Try to find and click the pause button
-        try:
-            pause_button = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, "//button[@aria-label='pause hero video']")
-            ))
-            pause_button.click()
-            time.sleep(2)
+    def _create_driver(self):
+        """Create Chrome WebDriver instance"""
+        return WebDriverFactory.create_chrome_driver()
 
-            # Check that video is paused
-            is_paused = driver.execute_script("return arguments[0].paused;", video)
-            self.assertTrue(is_paused, "Video did not pause after clicking Pause button")
-        except TimeoutException:
-            # If pause button not found, check if video is already paused
-            is_paused = driver.execute_script("return arguments[0].paused;", video)
-            if not is_paused:
-                self.fail("Pause button not found and video is playing")
+    def test_case_016_multiple_faq_clicks(self):
+        """Test multiple FAQ clicks for state consistency"""
+        print("Test Case 016 - Multiple FAQ clicks test")
+        self.page_actions.navigate_to_apple_arcade()
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
+        )
+        self.page_actions.scroll_to_faq_section()
 
-        # Find the play button and click it
-        play_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[@aria-label='play hero video']")
-        ))
-        play_button.click()
+        # Use helper for multiple FAQ clicks test
+        self.negative_helper.test_multiple_faq_clicks(self)
+
+    def test_case_017_small_viewport_test(self):
+        """Test functionality on small viewport"""
+        print("Test Case 017 - Small viewport test")
+        self.page_actions.navigate_to_apple_arcade()
         time.sleep(3)
 
-        # Verify that video is playing
-        is_playing = driver.execute_script("return !arguments[0].paused;", video)
-        self.assertTrue(is_playing, "Video did not start playing after clicking Play button")
+        # Use helper for viewport resize and scroll test
+        self.negative_helper.resize_window_and_scroll()
 
-    def tearDown(self):
+    def test_case_018_content_manipulation(self):
+        """Test behavior after content manipulation"""
+        print("Test Case 018 - Content manipulation test")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Use helper for content manipulation test
+        self.negative_helper.manipulate_faq_content()
+
+    def test_case_019_no_cookies_test(self):
+        """Test functionality without cookies"""
+        print("Test Case 019 - No cookies test")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Use helper for no cookies test
+        self.negative_helper.test_without_cookies(self)
+
+    def test_case_020_javascript_disabled(self):
+        """Test functionality with JavaScript disabled"""
+        print("Test Case 020 - JavaScript disabled test")
+
+        # Recreate driver with JavaScript disabled
         self.driver.quit()
+        self.driver = WebDriverFactory.create_chrome_driver(disable_js=True)
+        self.page_actions = AppleArcadePageActions(self.driver)
+        self.negative_helper = NegativeTestHelper(self.driver)
 
-class EdgePositiveTests(unittest.TestCase):
-    def setUp(self):
-        service = EdgeService(EdgeChromiumDriverManager().install())
-        options = webdriver.EdgeOptions()
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Edge(service=service, options=options)
-
-    def test_case_016_positive_apple_arcade(self):
-        # Verify "Try it free" button works
-        driver = self.driver
-        print("Test Case 016 - try free button")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        try_it_free = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Try it free')]"))
-        )
-        try_it_free.click()
-        time.sleep(2)
-
-        current_url = driver.current_url.lower()
-        self.assertTrue("apple.com" in current_url or "apps.apple.com" in current_url)
-
-    def test_case_017_positive_apple_arcade(self):
-        # Verify external App Store links work
-        driver = self.driver
-        print("Test Case 017 - external App Store links")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Wait for the first App Store link to be present
-        game_card = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//a[contains(@href, 'apps.apple.com')]"))
-        )
-        # Scroll to the App Store link smoothly and center it in the viewport
-        driver.execute_script("arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", game_card)
-        time.sleep(2)
-
-        # Click the App Store link
-        game_card.click()
-        time.sleep(2)
-
-        # Switch to the newly opened tab
-        driver.switch_to.window(driver.window_handles[-1])
-
-        # Verify that the current URL contains 'apps.apple.com'
-        current_url = driver.current_url.lower()
-        self.assertIn("apps.apple.com", current_url)
-
-    def test_case_018_positive_apple_arcade(self):
-        # Verify FAQ item expands on click
-        driver = self.driver
-        print("Test Case 018 - FAQ expand on click")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Scroll to the FAQ section header
-        faq_header = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
-        )
-        driver.execute_script("arguments[0].scrollIntoView(true);", faq_header)
-        time.sleep(2)
-
-        faq_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-controls, 'accordion')]"))
-        )
-        faq_button.click()
-        time.sleep(4)
-
-        expanded = faq_button.get_attribute("aria-expanded")
-        self.assertEqual(expanded, "true")
-
-    def test_case_019_positive_apple_arcade(self):
-        driver = self.driver
-        print("Test Case 019 - FAQ accessibility with keyboard")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        # Locate the FAQ section header by XPath
-        faq_header = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
+        # Navigate and wait for page load
+        self.page_actions.navigate_to_apple_arcade()
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
         )
 
-        # Scroll to the FAQ header to bring FAQ into view
-        driver.execute_script("arguments[0].scrollIntoView(true);", faq_header)
-        time.sleep(1)
+        # Test JavaScript disabled FAQ functionality
+        self.negative_helper.test_javascript_disabled_faq(self)
 
-        # Focus on the body element
-        body = driver.find_element(By.TAG_NAME, "body")
 
-        # Press TAB once - focus should move to the first FAQ toggle button
-        body.send_keys(Keys.TAB)
-        time.sleep(1)
+class FirefoxNegativeTests(BaseAppleArcadeTest):
+    """Negative test cases for Firefox browser"""
 
-        # Get the currently focused element (expected first FAQ button)
-        focused = driver.switch_to.active_element
+    def _create_driver(self):
+        """Create Firefox WebDriver instance"""
+        return WebDriverFactory.create_firefox_driver()
 
-        # Store unique attribute to refind the element later
-        aria_controls = focused.get_attribute("aria-controls")
+    def test_case_016_multiple_faq_clicks(self):
+        """Test multiple FAQ clicks for state consistency"""
+        print("Test Case 016 - Multiple FAQ clicks test")
+        self.page_actions.navigate_to_apple_arcade()
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
+        )
+        self.page_actions.scroll_to_faq_section()
 
-        # Press ENTER to expand the FAQ item
-        focused.send_keys(Keys.ENTER)
-        time.sleep(1)
+        # Use helper for multiple FAQ clicks test
+        self.negative_helper.test_multiple_faq_clicks(self)
 
-        # Re-find the FAQ button after DOM update
-        refreshed_faq_button = driver.find_element(By.XPATH, f"//button[@aria-controls='{aria_controls}']")
-
-        # Verify that the FAQ item expanded (aria-expanded="true")
-        expanded = refreshed_faq_button.get_attribute("aria-expanded")
-        self.assertEqual(expanded, "true", "FAQ item did not expand after ENTER key")
-
-    def test_case_020_positive_apple_arcade(self):
-        # Verify video banner playback
-        driver = self.driver
-        print("Test Case 020 - Verify video banner playback")
-
-        driver.get("https://www.apple.com/apple-arcade/")
-
-        wait = WebDriverWait(driver, 15)
-
-        # Wait for the video element
-        video = wait.until(EC.presence_of_element_located((By.TAG_NAME, "video")))
-
-        # Try to find and click the pause button
-        try:
-            pause_button = wait.until(EC.element_to_be_clickable(
-                (By.XPATH, "//button[@aria-label='pause hero video']")
-            ))
-            pause_button.click()
-            time.sleep(2)
-
-            # Check that video is paused
-            is_paused = driver.execute_script("return arguments[0].paused;", video)
-            self.assertTrue(is_paused, "Video did not pause after clicking Pause button")
-        except TimeoutException:
-            # If pause button not found, check if video is already paused
-            is_paused = driver.execute_script("return arguments[0].paused;", video)
-            if not is_paused:
-                self.fail("Pause button not found and video is playing")
-
-        # Find the play button and click it
-        play_button = wait.until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[@aria-label='play hero video']")
-        ))
-        play_button.click()
+    def test_case_017_small_viewport_test(self):
+        """Test functionality on small viewport"""
+        print("Test Case 017 - Small viewport test")
+        self.page_actions.navigate_to_apple_arcade()
         time.sleep(3)
 
-        # Verify that video is playing
-        is_playing = driver.execute_script("return !arguments[0].paused;", video)
-        self.assertTrue(is_playing, "Video did not start playing after clicking Play button")
+        # Use helper for viewport resize and scroll test
+        self.negative_helper.resize_window_and_scroll()
 
-    def tearDown(self):
+    def test_case_018_content_manipulation(self):
+        """Test behavior after content manipulation"""
+        print("Test Case 018 - Content manipulation test")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Use helper for content manipulation test
+        self.negative_helper.manipulate_faq_content()
+
+    def test_case_019_no_cookies_test(self):
+        """Test functionality without cookies"""
+        print("Test Case 019 - No cookies test")
+        self.page_actions.navigate_to_apple_arcade()
+
+        # Use helper for no cookies test
+        self.negative_helper.test_without_cookies(self)
+
+    def test_case_020_javascript_disabled(self):
+        """Test functionality with JavaScript disabled"""
+        print("Test Case 020 - JavaScript disabled test")
+
+        # Recreate driver with JavaScript disabled
         self.driver.quit()
+        self.driver = WebDriverFactory.create_firefox_driver(disable_js=True)
+        self.page_actions = AppleArcadePageActions(self.driver)
+        self.negative_helper = NegativeTestHelper(self.driver)
 
-class ChromeNegativeTestCases(unittest.TestCase):
-    def setUp(self):
-        service = ChromeService(ChromeDriverManager().install())
-        options = webdriver.ChromeOptions()
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Chrome(service=service, options=options)
-
-    def scroll_to_faq(self):
-        faq_header = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
+        # Navigate and wait for page load
+        self.page_actions.navigate_to_apple_arcade()
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
         )
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", faq_header
+
+        # Test JavaScript disabled FAQ functionality
+        self.negative_helper.test_javascript_disabled_faq(self)
+
+
+class EdgeNegativeTests(BaseAppleArcadeTest):
+    """Negative test cases for Edge browser"""
+
+    def _create_driver(self):
+        """Create Edge WebDriver instance"""
+        return WebDriverFactory.create_edge_driver()
+
+    def test_case_016_multiple_faq_clicks(self):
+        """Test multiple FAQ clicks for state consistency"""
+        print("Test Case 016 - Multiple FAQ clicks test")
+        self.page_actions.navigate_to_apple_arcade()
+        WebDriverWait(self.driver, 15).until(
+            EC.presence_of_element_located(self.selectors.BODY_TAG)
         )
-        time.sleep(2)
+        self.page_actions.scroll_to_faq_section()
 
-    def test_case_016_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        self.scroll_to_faq()
+        # Use helper for multiple FAQ clicks test
+        self.negative_helper.test_multiple_faq_clicks(self)
 
-        faq_button_xpath = "//button[contains(@aria-controls, 'accordion')]"
-        initial_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, faq_button_xpath))
-        )
-        initial_state = initial_button.get_attribute("aria-expanded")
-
-        states = []
-
-        for i in range(10):
-            try:
-                button = WebDriverWait(driver, 5).until(
-                    EC.element_to_be_clickable((By.XPATH, faq_button_xpath))
-                )
-                button.click()
-                time.sleep(0.5)
-                new_state = button.get_attribute("aria-expanded")
-                states.append(new_state)
-            except Exception as e:
-                print(f"Click {i + 1} failed: {e}")
-                states.append("error")
-
-        print("Aria states after clicks:", states)
-
-        self.assertIn("true", states, "aria-expanded did not become 'true' during 10 clicks")
-        self.assertNotEqual(len(set(states)), 1, "aria-expanded remained the same after 10 clicks")
-
-    def test_case_017_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
+    def test_case_017_small_viewport_test(self):
+        """Test functionality on small viewport"""
+        print("Test Case 017 - Small viewport test")
+        self.page_actions.navigate_to_apple_arcade()
         time.sleep(3)
 
-        driver.set_window_size(300, 500)
-        time.sleep(1)
+        # Use helper for viewport resize and scroll test
+        self.negative_helper.resize_window_and_scroll()
 
-        footer = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.TAG_NAME, "footer"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'end'});", footer
-        )
-        time.sleep(5)
+    def test_case_018_content_manipulation(self):
+        """Test behavior after content manipulation"""
+        print("Test Case 018 - Content manipulation test")
+        self.page_actions.navigate_to_apple_arcade()
 
-    def test_case_018_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        wait = WebDriverWait(driver, 15)
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+        # Use helper for content manipulation test
+        self.negative_helper.manipulate_faq_content()
 
-        faq_button = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-controls, 'accordion')]"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", faq_button
-        )
-        time.sleep(2)
+    def test_case_019_no_cookies_test(self):
+        """Test functionality without cookies"""
+        print("Test Case 019 - No cookies test")
+        self.page_actions.navigate_to_apple_arcade()
 
-        answer_id = faq_button.get_attribute("aria-controls")
-        driver.execute_script(f"document.getElementById('{answer_id}').innerHTML = '';")
-        time.sleep(2)
+        # Use helper for no cookies test
+        self.negative_helper.test_without_cookies(self)
 
-        faq_button.click()
-        time.sleep(2)
-        faq_button.click()
-        time.sleep(2)
-        faq_button.click()
-        time.sleep(2)
-
-    def test_case_019_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        driver.delete_all_cookies()
-        cookies = driver.get_cookies()
-        self.assertEqual(len(cookies), 0, f"Expected 0 cookies after deletion, but got {len(cookies)}")
-        driver.refresh()
-
-        wait = WebDriverWait(driver, 10)
-        try_it_free_button = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Try it free')]"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", try_it_free_button
-        )
-        time.sleep(1)
-
-        try_it_free_button.click()
-        time.sleep(5)
-
-    def test_case_020_negative_apple_arcade(self):
-        self.driver.quit()
-        service = ChromeService(ChromeDriverManager().install())
-        options = webdriver.ChromeOptions()
-        prefs = {"profile.managed_default_content_settings.javascript": 2}
-        options.add_experimental_option("prefs", prefs)
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Chrome(service=service, options=options)
-
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        self.scroll_to_faq()
-
-        faq_button = driver.find_element(By.XPATH, "//button[contains(@aria-controls, 'accordion')]")
-
-        initial_state = faq_button.get_attribute("aria-expanded")
-
-        answer_id = faq_button.get_attribute("aria-controls")
-        answer_element = driver.find_element(By.ID, answer_id)
-        self.assertTrue(answer_element.is_displayed(), "Answer should be visible initially with JS disabled")
-
-        for _ in range(5):
-            faq_button.click()
-            time.sleep(0.3)
-
-        final_state = faq_button.get_attribute("aria-expanded")
-        self.assertEqual(final_state, initial_state, "aria-expanded attribute should not change when JS is disabled")
-        self.assertTrue(answer_element.is_displayed(), "Answer should remain visible after clicks with JS disabled")
-        time.sleep(3)
-
-    def tearDown(self):
-        self.driver.quit()
-
-class FirefoxNegativeTestCases(unittest.TestCase):
-    def setUp(self):
-        service = FirefoxService(GeckoDriverManager().install())
-        options = webdriver.FirefoxOptions()
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Firefox(service=service, options=options)
-
-    def scroll_to_faq(self):
-        faq_header = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
-        )
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", faq_header
-        )
-        time.sleep(2)
-
-    def test_case_016_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        self.scroll_to_faq()
-
-        faq_button_xpath = "//button[contains(@aria-controls, 'accordion')]"
-        initial_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, faq_button_xpath))
-        )
-        initial_state = initial_button.get_attribute("aria-expanded")
-
-        states = []
-
-        for i in range(10):
-            try:
-                button = WebDriverWait(driver, 5).until(
-                    EC.element_to_be_clickable((By.XPATH, faq_button_xpath))
-                )
-                button.click()
-                time.sleep(0.5)
-                new_state = button.get_attribute("aria-expanded")
-                states.append(new_state)
-            except Exception as e:
-                print(f"Click {i + 1} failed: {e}")
-                states.append("error")
-
-        print("Aria states after clicks:", states)
-
-        self.assertIn("true", states, "aria-expanded did not become 'true' during 10 clicks")
-        self.assertNotEqual(len(set(states)), 1, "aria-expanded remained the same after 10 clicks")
-
-    def test_case_017_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        time.sleep(3)
-
-        driver.set_window_size(300, 500)
-        time.sleep(1)
-
-        footer = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.TAG_NAME, "footer"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'end'});", footer
-        )
-        time.sleep(5)
-
-    def test_case_018_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        wait = WebDriverWait(driver, 15)
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-
-        faq_button = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-controls, 'accordion')]"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", faq_button
-        )
-        time.sleep(2)
-
-        answer_id = faq_button.get_attribute("aria-controls")
-        driver.execute_script(f"document.getElementById('{answer_id}').innerHTML = '';")
-        time.sleep(2)
-
-        faq_button.click()
-        time.sleep(2)
-        faq_button.click()
-        time.sleep(2)
-        faq_button.click()
-        time.sleep(2)
-
-    def test_case_019_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        driver.delete_all_cookies()
-        cookies = driver.get_cookies()
-        self.assertEqual(len(cookies), 0, f"Expected 0 cookies after deletion, but got {len(cookies)}")
-        driver.refresh()
-
-        wait = WebDriverWait(driver, 10)
-        try_it_free_button = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Try it free')]"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", try_it_free_button
-        )
-        time.sleep(1)
-
-        try_it_free_button.click()
-        time.sleep(5)
-
-    def test_case_020_negative_apple_arcade(self):
-        self.driver.quit()
-        service = FirefoxService(GeckoDriverManager().install())
-        options = webdriver.FirefoxOptions()
-        options.set_preference("javascript.enabled", False)
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Firefox(service=service, options=options)
-
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        self.scroll_to_faq()
-
-        faq_button = driver.find_element(By.XPATH, "//button[contains(@aria-controls, 'accordion')]")
-
-        initial_state = faq_button.get_attribute("aria-expanded")
-
-        answer_id = faq_button.get_attribute("aria-controls")
-        answer_element = driver.find_element(By.ID, answer_id)
-        self.assertTrue(answer_element.is_displayed(), "Answer should be visible initially with JS disabled")
-
-        for _ in range(5):
-            faq_button.click()
-            time.sleep(0.3)
-
-        final_state = faq_button.get_attribute("aria-expanded")
-        self.assertEqual(final_state, initial_state, "aria-expanded attribute should not change when JS is disabled")
-        self.assertTrue(answer_element.is_displayed(), "Answer should remain visible after clicks with JS disabled")
-        time.sleep(3)
-
-    def tearDown(self):
-        self.driver.quit()
-
-class EdgeNegativeTestCases(unittest.TestCase):
-    def setUp(self):
-        service = EdgeService(EdgeChromiumDriverManager().install())
-        options = webdriver.EdgeOptions()
-        options.add_argument("--start-maximized")
-        self.driver = webdriver.Edge(service=service, options=options)
-
-    def scroll_to_faq(self):
-        faq_header = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//h2[contains(text(),'Questions? Answers.')]"))
-        )
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", faq_header
-        )
-        time.sleep(2)
-
-    def test_case_016_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-        self.scroll_to_faq()
-
-        faq_button_xpath = "//button[contains(@aria-controls, 'accordion')]"
-        initial_button = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.XPATH, faq_button_xpath))
-        )
-        initial_state = initial_button.get_attribute("aria-expanded")
-
-        states = []
-
-        for i in range(10):
-            try:
-                button = WebDriverWait(driver, 5).until(
-                    EC.element_to_be_clickable((By.XPATH, faq_button_xpath))
-                )
-                button.click()
-                time.sleep(0.5)
-                new_state = button.get_attribute("aria-expanded")
-                states.append(new_state)
-            except Exception as e:
-                print(f"Click {i + 1} failed: {e}")
-                states.append("error")
-
-        print("Aria states after clicks:", states)
-
-
-        self.assertIn("true", states, "aria-expanded did not become 'true' during 10 clicks")
-        self.assertNotEqual(len(set(states)), 1, "aria-expanded remained the same after 10 clicks")
-
-    def test_case_017_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        time.sleep(3)
-
-        driver.set_window_size(300, 500)
-        time.sleep(1)
-
-        footer = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.TAG_NAME, "footer"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'end'});", footer
-        )
-        time.sleep(5)
-
-    def test_case_018_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        wait = WebDriverWait(driver, 15)
-        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
-
-        faq_button = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-controls, 'accordion')]"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", faq_button
-        )
-        time.sleep(2)
-
-        answer_id = faq_button.get_attribute("aria-controls")
-        driver.execute_script(f"document.getElementById('{answer_id}').innerHTML = '';")
-        time.sleep(2)
-
-        faq_button.click()
-        time.sleep(2)
-        faq_button.click()
-        time.sleep(2)
-        faq_button.click()
-        time.sleep(2)
-
-    def test_case_019_negative_apple_arcade(self):
-        driver = self.driver
-        driver.get("https://www.apple.com/apple-arcade/")
-        driver.delete_all_cookies()
-        cookies = driver.get_cookies()
-        self.assertEqual(len(cookies), 0, f"Expected 0 cookies after deletion, but got {len(cookies)}")
-        driver.refresh()
-
-        wait = WebDriverWait(driver, 10)
-        try_it_free_button = wait.until(
-            EC.element_to_be_clickable((By.XPATH, "//a[contains(text(), 'Try it free')]"))
-        )
-        driver.execute_script(
-            "arguments[0].scrollIntoView({behavior: 'smooth', block: 'center'});", try_it_free_button
-        )
-        time.sleep(1)
-
-        try_it_free_button.click()
-        time.sleep(5)
-
-    def test_case_020_negative_apple_arcade(self):
-        # Edge JS disable not trivial, skipping or separate config needed
+    def test_case_020_javascript_disabled(self):
+        """Test functionality with JavaScript disabled (Edge - skipped)"""
+        print("Test Case 020 - JavaScript disabled test (Edge - skipped)")
+        # JavaScript disable test is not implemented for Edge yet
         pass
 
-    def tearDown(self):
-        self.driver.quit()
 
-
-#if __name__ == "__main__":
-    #unittest.main(AllureReports)
-
-
-#if __name__ == '__main__':
- #unittest.main(testRunner=HtmlTestRunner.HTMLTestRunner(output='./HtmlReports'))
+if __name__ == "__main__":
+    # Run all test classes
+    unittest.main()
