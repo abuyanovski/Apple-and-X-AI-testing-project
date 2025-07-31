@@ -2,7 +2,7 @@
 
 # 🍎 Apple & X.AI Testing Project
 
-![Main pic](https://github.com/SerineGit/vizitka/blob/main/freepik__dynamic-tracking-shot-an-android-with-artificial-i__80151-ezgif.com-video-to-gif-converter.gif)
+![Main pic](https://github.com/SerineGit/Apple-and-X-AI-testing-project/blob/main/apple_xai.gif)
 
 <div align="center">
 
@@ -42,9 +42,6 @@
 
 [🌐 Apple.com](https://www.apple.com/) • [🤖 X.AI](https://x.ai/)
 
-
-
----
 
 ## 📋 Project Overview
 
@@ -89,24 +86,19 @@ Discover our interactive project architecture through this link:
   </tr>
 </table>
 
----
-
-
 ## 🛠 Technology Stack
-
-
 
 | Category | Technologies |
 |-----------|------------|
-| **Languages** | ![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white) |
-| **Automation** | ![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=flat&logo=selenium&logoColor=white) ![Requests](https://img.shields.io/badge/Requests-2CA5E0?style=flat&logo=python&logoColor=white) |
-| **Testing** | ![unittest](https://img.shields.io/badge/unittest-FF6B6B?style=flat&logo=python&logoColor=white) ![HTMLTestRunner](https://img.shields.io/badge/HTMLTestRunner-4ECDC4?style=flat) |
-| **Performance** | ![GTmetrix](https://img.shields.io/badge/GTmetrix-FF6900?style=flat) ![Lighthouse](https://img.shields.io/badge/Lighthouse-F44B21?style=flat&logo=lighthouse&logoColor=white) |
-| **Security** | ![Observatory](https://img.shields.io/badge/HTTP_Observatory-FF0000?style=flat) ![Astra](https://img.shields.io/badge/Astra-6C5CE7?style=flat) |
-| **CI/CD** | ![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white) ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=jenkins&logoColor=white) |
+| **Languages** | [![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)](https://www.python.org/) |
+| **Automation** | [![Selenium](https://img.shields.io/badge/Selenium-43B02A?style=flat&logo=selenium&logoColor=white)](https://selenium-python.readthedocs.io/) [![Requests](https://img.shields.io/badge/Requests-2CA5E0?style=flat&logo=python&logoColor=white)](https://docs.python-requests.org/) |
+| **Testing** | [![unittest](https://img.shields.io/badge/unittest-FF6B6B?style=flat&logo=python&logoColor=white)](https://docs.python.org/3/library/unittest.html) [![HTMLTestRunner](https://img.shields.io/badge/HTMLTestRunner-4ECDC4?style=flat)](https://github.com/oldani/HtmlTestRunner) |
+| **Performance** | [![GTmetrix](https://img.shields.io/badge/GTmetrix-FF6900?style=flat)](https://gtmetrix.com/) [![Lighthouse](https://img.shields.io/badge/Lighthouse-F44B21?style=flat&logo=lighthouse&logoColor=white)](https://developers.google.com/web/tools/lighthouse) |
+| **Security** | [![Observatory](https://img.shields.io/badge/HTTP_Observatory-FF0000?style=flat)](https://observatory.mozilla.org/) [![Astra](https://img.shields.io/badge/Astra-6C5CE7?style=flat)](https://www.getastra.com/) |
+| **CI/CD** | [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white)](https://github.com/features/actions) [![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=jenkins&logoColor=white)](https://www.jenkins.io/) |
 
 </div>
----
+
 
 ## 🎯 Key Features
 
@@ -134,8 +126,6 @@ Discover our interactive project architecture through this link:
 - XSS and CSRF checks
 - Security audit reports
 
----
-
 <div align="center">
 
 ## 👥 Our Team
@@ -154,9 +144,6 @@ Discover our interactive project architecture through this link:
 | **🧪 QA Engineer** | Daria Bataeva | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/daria-bataeva) |
 | **🧪 QA Engineer** | Serine Zargaryan | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/serinezargaryan) |
 | **🧪 QA Engineer** | Anton Buyanovski | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/antonb-qa) |
-
-
----
 
 ### 🎯 Project Statistics
 
