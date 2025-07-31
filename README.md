@@ -1,99 +1,174 @@
-# Apple-and-X-AI-testing-project
-
-![Main pic](https://github.com/SergioUS/Apple-and-X-AI-testing-project/blob/main/Project%20Header.png)
-
-# 🧪 QA Automation Project: Frontend & API Testing
-
-Welcome to our group's two-part QA Automation project. This project demonstrates both **frontend UI testing** and **backend API validation**, built using Python's `unittest` framework.
+1.
+[![Demo](https://img.shields.io/badge/Demo-Project-red?style=flat-square&logo=github)](https://serinegit.github.io/project-page/)
+![WELCOME](https://raw.githubusercontent.com/SerineGit/project-page/refs/heads/main/img_for_readme/top.jpg)
 
 
----
+----
+2. 
+<div align="center">
 
-## 🚀 Project Overview
+# 🚨 DANGER ZONE 🚨
 
-### 🔹 Part 1: Frontend UI Testing – `apple.com`
+<details>
+<summary>⚠️ <strong>WARNING: DO NOT CLICK THE BUTTON BELOW</strong> ⚠️</summary>
 
-- Automated using **Selenium WebDriver**
-- Validates key UI elements, page titles, navigation flow, and responsiveness
-- Organized with **Page Object Model** for scalability
-- Built with Python `unittest`
+### You risk being transported into an alternate QA-powered virtual reality!
 
-### 🔹 Part 2: API Testing – `x-ai.com`
+<p align="center">
+  <img src="https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif" width="200"/>
+</p>
 
-- Tests REST APIs for correct responses, status codes, and data structures
-- Validates authentication, error handling, and edge cases
+> 🎭 **Final Warning:** This link may alter your perception of reality forever...
 
+<br>
 
----
+**👇 If you still dare to proceed... 👇**
 
-## 🧱 Project Structure
+[![🌀 ENTER THE PORTAL 🌀](https://img.shields.io/badge/🚪_ENTER_IF_YOU_DARE-FF0000?style=for-the-badge&logo=ghost&logoColor=white&labelColor=000000)](https://serinegit.github.io/project-page/)
 
-Project Folder/  
-├── 01_Documentation  
-├── 02_Front_end_Testing  
-│   ├── Tatsiana Lentz  
-│   ├── Milana Binaminova    
-│   ├── Sergiy Borovich      
-│   ├── Viktor Pervushkin     
-│   ├── Assiya Beribassova    
-│   ├── Lina Gorelik   
-│   ├── Daria Bataeva  
-│   └── Anton Buyanovski           
-├── 03_Performance_testing  
-│ ├── GTmetrix  
-│ ├── Lighthouse     
-│ └── SpeedLab         
-├── 04_Security_testing  
-│ ├── HTTP Observatory  
-│ ├── Astra  
-│ └── Other Security Testing Tools  
-├── 05_API_Testing  
-│ ├── data/ # Sample payloads or config  
-│ ├── pages/ # Page Object Model classes  
-│ └── utils/ # Helpers   
-├── 06_Bug_Reports  
-│   ├── Tatsiana Lentz  
-│   ├── Milana Binaminova  
-│   ├── Sergiy Borovich      
-│   ├── Viktor Pervushkin     
-│   ├── Assiya Beribassova    
-│   ├── Lina Gorelik   
-│   ├── Daria Bataeva  
-│   └── Anton Buyanovski           
-└── README.md # You're here!  
+</details>
+
+</div>
 
 
+-----
+3.
+<div align="center">
 
+# 🎮 QUEST: Virtual Reality Portal
 
+<table>
+<tr>
+<td align="center">
+
+### 📊 Danger Level
+![Danger](https://geps.dev/progress/95?dangerColor=ff0000&warningColor=ff8c00&successColor=00ff00)
+**EXTREME** 🔥
+
+</td>
+<td align="center">
+
+### 🎯 Success Rate
+![Success](https://geps.dev/progress/15?dangerColor=ff0000&warningColor=ff8c00&successColor=00ff00)
+**VERY LOW** 💀
+
+</td>
+</tr>
+</table>
 
 ---
 
-## 🧪 Technologies Used
+### ⚠️ MISSION BRIEFING ⚠️
 
-- Python 3.x  
-- `unittest` (core framework)  
-- `selenium` for browser automation  
-- `requests` for API testing  
-- `HTMLTestRunner` for reports  
-- Git & GitHub for version control  
-- Optional: Jenkins / GitHub Actions for CI
+> **Target:** Unknown portal to QA virtual reality  
+> **Status:** 🔴 Extremely dangerous  
+> **Recommendation:** Stay away!  
 
+<details>
+<summary>🎪 <strong>Accept the challenge? (Click to expand)</strong></summary>
 
-## 👥 Team
-| Name                          | Link                                   | 
-|-------------------------------|----------------------------------------|
-| Sergey Efremov (Project Lead) | https://www.linkedin.com/in/sefremoff  |
-| Tatsiana Lentz (QA Lead )     | www.linkedin.com/in/tatsianalentz      |
-| Milana Binaminova             | www.linkedin.com/in/milana-binaminova  |
-| Sergiy Borovich               | www.linkedin.com/in/sergiy-borovich    |
-| Viktor Pervushkin             | www.linkedin.com/in/viktp              |
-| Assiya Beribassova            | www.linkedin.com/in/assiya-beribassova |
-| Lina Gorelik                  | www.linkedin.com/in/lina-gorelik       |
-| Daria Bataeva                 | www.linkedin.com/in/daria-bataeva      |
-| Serine Zargaryan              | https://www.linkedin.com/in/serinezargaryan/ |
-| Anton Buyanovski              | www.linkedin.com/in/antonb-qa          |
+<br>
+<br>
+
+<a href="https://serinegit.github.io/project-page/">
+  <img src="https://img.shields.io/badge/🌀_ACTIVATE_PORTAL-darkred?style=for-the-badge&logo=atom&logoColor=white&animation=pulse" />
+</a>
+
+</details>
+
+</div>
+
+-----
+4.
 
 
+<div align="center">
 
-# Apple-and-X-AI-testing-project
-Apple and X-AI testing project: FE, API, Performance and Security testing, Cloud Automation testing, QA-Documentation. https://www.apple.com/ , https://x.ai/
+# 🛸 INTERDIMENSIONAL PORTAL
+
+<img src="https://img.shields.io/badge/STATUS-🔴_ACTIVE-red?style=flat-square" />
+<img src="https://img.shields.io/badge/DIMENSION-QA_REALITY-purple?style=flat-square" />
+<img src="https://img.shields.io/badge/DANGER-⚠️_MAXIMUM-orange?style=flat-square" />
+
+---
+
+## 📋 ANOMALY DOSSIER
+
+| Parameter | Value | Note |
+|-----------|-------|------|
+| 🌍 **Type** | Virtual Reality | QA-powered |
+| ⚡ **Energy** | 9,847 TeV | Critical level |
+| 🕳️ **Stability** | 23% | Extremely unstable |
+| 🧬 **Bio-compatibility** | Unknown | ⚠️ Not tested |
+
+<details>
+<summary>🔬 <strong>SCIENTIFIC DATA</strong> (Click to view)</summary>
+<br>
+
+### 📊 Risk Analysis
+
+```mermaid
+graph TD
+    A[User] --> B{Click button?}
+    B -->|Yes| C[Enter portal]
+    B -->|No| D[Safety]
+    C --> E[QA Reality]
+    E --> F{Return possible?}
+    F -->|12% chance| G[Successful return]
+    F -->|88% chance| H[Stuck forever]
+
+```
+</div>
+
+
+5. 
+
+<div align="center">
+
+# 🕹️ GAME OVER... OR NOT?
+
+<details>
+<summary>🎲 <strong>Choose your action</strong></summary>
+
+<br>
+
+### 🎯 Battle Statistics
+
+<table>
+<tr>
+<td align="center">
+
+**🏃‍♂️ ESCAPE**  
+Success: 85%  
+![Escape](https://geps.dev/progress/85)
+
+</td>
+<td align="center">
+
+**⚔️ ENTER PORTAL**  
+Success: 15%  
+![Fight](https://geps.dev/progress/15)
+
+</td>
+</tr>
+</table>
+
+---
+
+### 💭 What will you choose?
+
+> 🧙‍♂️ **Wise Wizard says:**  
+> "Many have entered this portal, young traveler.  
+> Few have returned to tell the tale..."
+
+<br>
+
+**🎮 BOSS BATTLE:**
+
+[![ENTER THE DUNGEON](https://img.shields.io/badge/🏰_ENTER_THE_DUNGEON-8B0000?style=for-the-badge&logo=gamepad&logoColor=white)](https://serinegit.github.io/project-page/)
+
+*Press START to continue... if you dare* 🕹️
+
+</details>
+
+</div>
