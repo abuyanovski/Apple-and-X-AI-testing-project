@@ -2,7 +2,7 @@
 
 # 🍎 Apple & X.AI Testing Project
 
-![Main pic](https://github.com/SerineGit/vizitka/blob/main/freepik__dynamic-tracking-shot-an-android-with-artificial-i__80151-ezgif.com-video-to-gif-converter.gif)
+![Main pic](https://github.com/SerineGit/Apple-and-X-AI-testing-project/blob/main/apple_xai.gif)
 
 <div align="center">
 
