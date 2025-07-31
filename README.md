@@ -43,9 +43,6 @@
 [🌐 Apple.com](https://www.apple.com/) • [🤖 X.AI](https://x.ai/)
 
 
-
----
-
 ## 📋 Project Overview
 
 
@@ -89,12 +86,7 @@ Discover our interactive project architecture through this link:
   </tr>
 </table>
 
----
-
-
 ## 🛠 Technology Stack
-
-
 
 | Category | Technologies |
 |-----------|------------|
@@ -106,7 +98,7 @@ Discover our interactive project architecture through this link:
 | **CI/CD** | [![GitHub Actions](https://img.shields.io/badge/GitHub_Actions-2088FF?style=flat&logo=github-actions&logoColor=white)](https://github.com/features/actions) [![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=flat&logo=jenkins&logoColor=white)](https://www.jenkins.io/) |
 
 </div>
----
+
 
 ## 🎯 Key Features
 
@@ -134,8 +126,6 @@ Discover our interactive project architecture through this link:
 - XSS and CSRF checks
 - Security audit reports
 
----
-
 <div align="center">
 
 ## 👥 Our Team
@@ -154,9 +144,6 @@ Discover our interactive project architecture through this link:
 | **🧪 QA Engineer** | Daria Bataeva | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/daria-bataeva) |
 | **🧪 QA Engineer** | Serine Zargaryan | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/serinezargaryan) |
 | **🧪 QA Engineer** | Anton Buyanovski | [![LinkedIn](https://img.shields.io/badge/LinkedIn-0077B5?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/antonb-qa) |
-
-
----
 
 ### 🎯 Project Statistics
 
